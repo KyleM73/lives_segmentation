@@ -1,5 +1,5 @@
 # lives_segmentation
-LiDAR Informed Visual Search (LIVES) with Learned Scan Classification
+LiDAR InformEd Visual Search (LIVES) with Learned Scan Classification
 
 ## Setup
 - clone this repo and `cd` into it
