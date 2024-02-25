@@ -7,7 +7,7 @@ data:
   batch_size: 4096
   scan_length: 897
 train:
-  epochs: 5
+  epochs: 50
   filters: 1
   exp_decay_factor: 1
   train_data_corruption_fraction: 0.1
