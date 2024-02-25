@@ -5,7 +5,7 @@ import os
 
 LIVES_DATA_PATH = os.path.dirname(os.path.realpath(__file__))
 
-def make_dataset(k=5):
+def make_dataset(k: int = 5) -> int:
     csv_dir = LIVES_DATA_PATH + "/csv"
     raw_dir = LIVES_DATA_PATH + "/raw"
     
@@ -36,14 +36,17 @@ def make_dataset(k=5):
                 counter += 1
     return counter
 
-def clear_dataset(dir):
+def clear_dataset(dir: str) -> None:
     for sub_dir in os.listdir(dir):
         for file in os.listdir(os.path.join(dir,sub_dir)):
             os.remove(os.path.join(os.path.join(dir,sub_dir),file))
         os.rmdir(os.path.join(dir,sub_dir))
 
 class LidarDataset(torch.utils.data.Dataset):
-    def __init__(self,data_dir,count=None,device="cpu"):
+    def __init__(self,
+                 data_dir: str,
+                 count: int = None,
+                 device: str = "cpu") -> None:
         self.data_dir = data_dir
         if isinstance(count,int):
             self.count = count
@@ -51,16 +54,20 @@ class LidarDataset(torch.utils.data.Dataset):
             self.count = len(os.listdir(self.data_dir))
         self.device = device
                 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.count
 
-    def __getitem__(self,idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         p = torch.from_numpy(np.load(self.data_dir+"/{}/p.npy".format(idx), allow_pickle=False)).to(self.device,dtype=torch.float32)
         x = torch.from_numpy(np.load(self.data_dir+"/{}/x.npy".format(idx), allow_pickle=False)).to(self.device,dtype=torch.float32)
         y = torch.from_numpy(np.load(self.data_dir+"/{}/y.npy".format(idx), allow_pickle=False)).to(self.device,dtype=torch.float32)
         return p,x,y
 
-def make_batched_dataset(batch_size=4096,k=5,clear=True):
+def make_batched_dataset(
+        batch_size: int = 4096,
+        k: int = 5,
+        clear: bool = True
+        ) -> None:
     raw_dir = LIVES_DATA_PATH + "/raw"
     batched_dir = LIVES_DATA_PATH + "/batched"
     if clear:
